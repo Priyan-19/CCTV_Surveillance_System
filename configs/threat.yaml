@@ -1,0 +1,53 @@
+# Threat Engine Configuration
+# Derived from docs/05_THREAT_ENGINE_SPEC.md
+
+correlation:
+  # Maximum time window in seconds to link events into the same incident
+  time_window_seconds: 120
+  # Quiet period in seconds with no new events before closing an active incident
+  quiet_period_seconds: 300
+  correlation_keys:
+    - track_id
+    - person_id
+    - object_id
+    - location
+
+# Base weights assigned per unique event type (0-100 scale)
+event_weights:
+  FIGHTING: 50
+  RESTRICTED_ZONE_ENTRY: 40
+  ABANDONED_OBJECT: 30
+  LINE_CROSSING: 20
+  LOITERING: 20
+  PROLONGED_STAY: 15
+  OCCUPANCY_EXCEEDED: 15
+  RUNNING: 10
+  UNKNOWN_PERSON: 0 # Used as a modifier (+15) rather than standalone weight
+
+# Score modifiers applied to the base sum
+modifiers:
+  unknown_person_penalty: 15
+  known_authorized_bonus: -20
+  distinct_event_types_threshold: 3
+  distinct_event_types_penalty: 10
+  high_risk_zone_penalty: 10
+  repeated_event_type_multiplier: 0.25 # +25% of that event's weight, applied once
+
+# Incident classification tiers
+severity_levels:
+  low:
+    min_score: 0
+    max_score: 29
+    action: "log_only"
+  medium:
+    min_score: 30
+    max_score: 59
+    action: "dashboard_alert"
+  high:
+    min_score: 60
+    max_score: 79
+    action: "dashboard_alert_and_evidence_notification"
+  critical:
+    min_score: 80
+    max_score: 100
+    action: "priority_alert_and_evidence_notification"

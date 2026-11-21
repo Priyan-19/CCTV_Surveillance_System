@@ -1,0 +1,95 @@
+cameras:
+  cam_01:
+    zones:
+    - id: zone_lobby_waiting
+      name: Lobby Waiting Area
+      type: occupancy
+      polygon:
+      - - 100
+        - 100
+      - - 540
+        - 100
+      - - 540
+        - 300
+      - - 100
+        - 300
+      occupancy_limit: 4
+      dwell_threshold_seconds: 60.0
+      risk_level: low
+    lines:
+    - id: line_entrance_threshold
+      name: Main Entrance Tripwire
+      start:
+      - 200
+      - 320
+      end:
+      - 440
+      - 320
+      direction: inbound
+  cam_02:
+    zones:
+    - id: zone_restricted_server_room
+      name: Server Room Perimeter
+      type: restricted
+      polygon:
+      - - 150
+        - 80
+      - - 490
+        - 80
+      - - 490
+        - 350
+      - - 150
+        - 350
+      dwell_threshold_seconds: 5.0
+      risk_level: high
+    lines:
+    - id: line_server_door
+      name: Server Room Door Line
+      start:
+      - 180
+      - 200
+      end:
+      - 400
+      - 200
+      direction: inbound
+  sample_walking_01:
+    zones:
+    - id: zone_restricted_corridor
+      name: Restricted Back Corridor
+      type: restricted
+      polygon:
+      - - 100
+        - 60
+      - - 280
+        - 60
+      - - 280
+        - 180
+      - - 100
+        - 180
+      dwell_threshold_seconds: 5.0
+      risk_level: high
+    - id: zone_lobby_occupancy
+      name: Lobby Pedestrian Occupancy Area
+      type: occupancy
+      polygon:
+      - - 50
+        - 70
+      - - 330
+        - 70
+      - - 330
+        - 260
+      - - 50
+        - 260
+      dwell_threshold_seconds: 30.0
+      risk_level: medium
+      occupancy_limit: 3
+    lines:
+    - id: line_hallway_tripwire
+      name: Hallway Entrance Tripwire
+      start:
+      - 70
+      - 210
+      end:
+      - 310
+      - 210
+      direction: inbound

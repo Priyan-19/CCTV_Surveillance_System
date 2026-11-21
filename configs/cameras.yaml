@@ -1,0 +1,67 @@
+# Camera & Video Stream Sources Configuration
+# Registers sample video files, live webcam inputs, and RTSP stream endpoints.
+
+cameras:
+  - id: "cam_walk_01"
+    name: "Lobby Corridor (Single Pedestrian)"
+    source: "data/samples/sample_walking_01.mp4"
+    type: "file"
+    fps_limit: 25
+    enabled: true
+    description: "CAVIAR Walk1 sequence - single pedestrian corridor walk"
+
+  - id: "cam_walk_02"
+    name: "Lobby Entrance (Pedestrian Pair)"
+    source: "data/samples/sample_walking_02.mp4"
+    type: "file"
+    fps_limit: 25
+    enabled: true
+    description: "CAVIAR Walk2 sequence - two pedestrians crossing lobby"
+
+  - id: "cam_bag_01"
+    name: "Corridor Wall (Abandoned Bag)"
+    source: "data/samples/sample_abandoned_bag_01.mp4"
+    type: "file"
+    fps_limit: 25
+    enabled: true
+    description: "CAVIAR LeftBag sequence - backpack dropped on floor"
+
+  - id: "cam_bag_02"
+    name: "Waiting Lounge (Bag by Chair)"
+    source: "data/samples/sample_abandoned_bag_02.mp4"
+    type: "file"
+    fps_limit: 25
+    enabled: true
+    description: "CAVIAR LeftBag_AtChair sequence - bag left beside seating"
+
+  - id: "cam_fight_01"
+    name: "Corridor Altercation"
+    source: "data/samples/sample_fight_01.mp4"
+    type: "file"
+    fps_limit: 25
+    enabled: true
+    description: "CAVIAR Fight_RunAway sequence - physical dispute and running"
+
+  - id: "cam_normal_01"
+    name: "Normal Hallway Activity"
+    source: "data/samples/sample_normal_01.mp4"
+    type: "file"
+    fps_limit: 25
+    enabled: true
+    description: "CAVIAR Walk3 sequence - normal multiple pedestrian flow"
+
+  - id: "cam_webcam"
+    name: "Local Laptop Webcam"
+    source: "0" # Device index 0
+    type: "webcam"
+    fps_limit: 30
+    enabled: false
+    description: "Live onboard webcam for real-time testing"
+
+  - id: "cam_rtsp_demo"
+    name: "IP Surveillance Camera (Demo RTSP)"
+    source: "rtsp://127.0.0.1:8554/live"
+    type: "rtsp"
+    fps_limit: 25
+    enabled: false
+    description: "RTSP IP camera stream (marked UNTESTED if no live RTSP endpoint is available)"

@@ -1,0 +1,26 @@
+# ByteTrack Multi-Object Tracker Configuration
+# Reference: docs/02_TRD.md, docs/06_ML_MODEL_PLAN.md (Section 3)
+
+# Tracker type identifier (must be bytetrack)
+tracker_type: bytetrack
+
+# Threshold for the primary association step (high confidence detections)
+track_high_thresh: 0.5
+
+# Threshold for the secondary association step (low confidence detections).
+# Crucial for maintaining track continuity during partial occlusion or motion blur.
+track_low_thresh: 0.1
+
+# Minimum confidence required to initialize a new track (prevents spurious background tracks)
+new_track_thresh: 0.6
+
+# Number of consecutive frames to keep a lost track in memory before permanently removing it.
+# Increased from 30 to 60 frames (~2.4 seconds buffer at 25 FPS) based on Step 7 track_report
+# to bridge corridor turn occlusions and prevent spurious ID fragmentation.
+track_buffer: 60
+
+# IoU matching distance threshold for Hungarian algorithm association (higher allows more relaxed spatial matching)
+match_thresh: 0.8
+
+# Fuse detection confidence score into similarity calculation
+fuse_score: true

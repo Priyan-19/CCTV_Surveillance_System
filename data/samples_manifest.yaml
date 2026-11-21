@@ -1,0 +1,74 @@
+version: '1.0'
+description: Sample test clips inventory for Phases 0 to 3. Quarantined from training
+  data.
+clips:
+- file: sample_walking_01.mp4
+  source_dataset: CAVIAR
+  original_name: Walk1.mp4
+  resolution: 384x288
+  fps: 24.48
+  frame_count: 612
+  duration_seconds: 25.0
+  scenario: walking_single
+  expected_events: One person walking in a corridor and returning. Validates YOLO
+    person detection and single-track ID persistence.
+- file: sample_walking_02.mp4
+  source_dataset: CAVIAR
+  original_name: Walk2.mp4
+  resolution: 384x288
+  fps: 24.7
+  frame_count: 1056
+  duration_seconds: 42.76
+  scenario: walking_pair
+  expected_events: Two pedestrians walking in lobby. Validates multi-target tracking
+    without ID swap.
+- file: sample_abandoned_bag_01.mp4
+  source_dataset: CAVIAR
+  original_name: LeftBag.mp4
+  resolution: 384x288
+  fps: 24.78
+  frame_count: 1440
+  duration_seconds: 58.12
+  scenario: abandoned_object_wall
+  expected_events: 'Person enters, drops backpack on floor near wall, and departs.
+    Expected: ABANDONED_OBJECT trigger after dwell threshold.'
+- file: sample_abandoned_bag_02.mp4
+  source_dataset: CAVIAR
+  original_name: LeftBag_AtChair.mp4
+  resolution: 384x288
+  fps: 24.73
+  frame_count: 1115
+  duration_seconds: 45.08
+  scenario: abandoned_object_chair
+  expected_events: 'Person drops bag beside waiting chairs and leaves scene. Expected:
+    ABANDONED_OBJECT trigger.'
+- file: sample_abandoned_bag_hd.mp4
+  source_dataset: ABODA
+  original_name: video1.mp4
+  resolution: 640x480
+  fps: 29.97
+  frame_count: 2189
+  duration_seconds: 73.04
+  scenario: abandoned_object_hd
+  expected_events: 'Unattended bag scenario at 640x480 resolution (meets 640px YOLO
+    baseline). Expected: ABANDONED_OBJECT trigger.'
+- file: sample_fight_01.mp4
+  source_dataset: CAVIAR
+  original_name: Fight_RunAway1.mp4
+  resolution: 384x288
+  fps: 24.47
+  frame_count: 551
+  duration_seconds: 22.52
+  scenario: fighting_and_running
+  expected_events: 'Two individuals meet, fight briefly, then separate and run away.
+    Expected: Altercation motion and rapid running.'
+- file: sample_normal_01.mp4
+  source_dataset: CAVIAR
+  original_name: Walk3.mp4
+  resolution: 384x288
+  fps: 24.77
+  frame_count: 1380
+  duration_seconds: 55.72
+  scenario: normal_pedestrians
+  expected_events: Multiple individuals walking and crossing paths peacefully. Validates
+    baseline false-positive prevention.

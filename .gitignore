@@ -1,0 +1,83 @@
+# Bytecode and compilation cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Python virtual environments and package builds
+.venv/
+env/
+venv/
+ENV/
+build/
+dist/
+*.egg-info/
+
+# Deep learning weights and model checkpoints (never commit model weights)
+models/*
+!models/.gitkeep
+*.pt
+*.pth
+*.onnx
+*.engine
+*.bin
+
+# Video, audio, archive and binary media formats
+*.mp4
+*.avi
+*.mpg
+*.mpeg
+*.mkv
+*.mov
+*.wmv
+*.flv
+*.webm
+*.tar
+*.tar.gz
+*.tar.xz
+*.zip
+*.rar
+*.7z
+
+# Data directories and raw datasets
+data/known_persons/*
+!data/known_persons/.gitkeep
+data/datasets/*
+!data/datasets/**/.gitkeep
+data/samples/*
+!data/samples/README.md
+!data/samples/.gitkeep
+
+# Generated pipeline output, visual media, and run artifacts
+data/output/*
+!data/output/.gitkeep
+!data/output/benchmarks/*.md
+!data/output/benchmarks/*.csv
+
+# Project manifests and documentation in data/ must be tracked
+!data/DATASETS.md
+!data/samples_manifest.yaml
+
+# Ultralytics runs and settings cache
+runs/
+settings.json
+
+# Generated evidence and incident logs
+evidence/*
+!evidence/.gitkeep
+logs/
+*.log
+
+# Testing, coverage and profiler caches
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE, editor and OS metadata
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+desktop.ini

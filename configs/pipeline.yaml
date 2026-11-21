@@ -1,0 +1,35 @@
+# Pipeline Execution Configuration (Phase 1)
+# Controls Detector, Tracker, Annotator, and Processing options.
+
+model:
+  name: "yolo26s.pt"            # Default YOLO model weights (fallback: yolo11s.pt)
+  device: "cuda:0"              # Target execution device ('cuda:0' or 'cpu')
+  half_precision: true          # Use FP16 half-precision for speed & memory efficiency
+  imgsz: 640                    # Input resolution dimension for YOLO inference
+  conf_threshold: 0.25          # Minimum detection confidence
+  iou_threshold: 0.70           # Non-maximum suppression (NMS) IoU overlap threshold
+
+# COCO Class IDs to retain for surveillance monitoring:
+# 0: person, 1: bicycle, 2: car, 3: motorcycle, 5: bus, 7: truck, 
+# 24: backpack, 26: handbag, 28: suitcase
+tracked_classes:
+  - 0   # person
+  - 1   # bicycle
+  - 2   # car
+  - 3   # motorcycle
+  - 5   # bus
+  - 7   # truck
+  - 24  # backpack
+  - 26  # handbag
+  - 28  # suitcase
+
+tracker:
+  config_path: "configs/bytetrack.yaml"
+  persist: true                 # Maintain tracks across subsequent frames
+  trail_length: 30              # Max centroids retained in track history for motion trails
+
+pipeline:
+  frame_skip: 0                 # 0 = process every frame; 1 = process every 2nd frame, etc.
+  output_dir: "data/output"     # Default directory for annotated videos and metric JSONs
+  save_annotated_video: true    # Encode and save visual output
+  display_window: false         # Show live OpenCV display window during processing
