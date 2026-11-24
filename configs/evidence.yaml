@@ -1,0 +1,31 @@
+# Evidence Collection & Rolling Frame Buffer Configuration
+# Conforms to docs/05_THREAT_ENGINE_SPEC.md (FR-24), docs/07_DATABASE_SCHEMA.md, and docs/11_SECURITY_PRIVACY.md.
+
+ring_buffer:
+  # Rolling RAM frame buffer duration in seconds per camera
+  buffer_duration_seconds: 30.0
+  # Strict memory cap in Megabytes for compressed JPEG ring buffer
+  max_buffer_memory_mb: 250.0
+  # JPEG compression quality for ring buffer frames (1-100)
+  jpeg_quality: 85
+
+video_clip:
+  # Seconds of footage to include before the incident's first event
+  pre_roll_seconds: 10.0
+  # Seconds of footage to include after the incident's last event
+  post_roll_seconds: 10.0
+  # Maximum allowed length of a generated evidence video clip in seconds
+  max_clip_length_seconds: 60.0
+  # Output video frame rate
+  fps: 25.0
+  # H.264 fourcc codec for browser playback ('avc1' or 'mp4v')
+  fourcc: "mp4v"
+
+policy:
+  # Minimum severity level required to trigger video clip generation ('Medium', 'High', 'Critical')
+  # Images (person, face, object) are collected for all incidents; clips for Medium and above
+  min_level_for_clip: "Medium"
+  # Minimum free disk space in Megabytes required to write evidence
+  min_free_disk_mb: 500.0
+  # Directory where evidence packages are stored (relative to project root)
+  evidence_dir: "evidence"

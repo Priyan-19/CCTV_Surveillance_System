@@ -1,95 +1,120 @@
+# Spatial Zone and Virtual Tripwire Configuration (Phase 2)
+# Conforms to docs/07_DATABASE_SCHEMA.md (zones table).
+# All coordinates are stored with reference_resolution [width, height]
+# and automatically scaled dynamically to match incoming camera frame dimensions.
+
 cameras:
-  cam_01:
+  cam_walk_01:
     zones:
-    - id: zone_lobby_waiting
-      name: Lobby Waiting Area
-      type: occupancy
-      polygon:
-      - - 100
-        - 100
-      - - 540
-        - 100
-      - - 540
-        - 300
-      - - 100
-        - 300
-      occupancy_limit: 4
-      dwell_threshold_seconds: 60.0
-      risk_level: low
+      - id: "zone_corridor_deep"
+        name: "Deep Corridor (Restricted Perimeter)"
+        type: "restricted"
+        reference_resolution: [384, 288]
+        polygon:
+          - [90, 40]
+          - [290, 40]
+          - [290, 140]
+          - [90, 140]
+        dwell_threshold_seconds: 5.0
+        occupancy_limit: 1
+        risk_level: "High"
+
+      - id: "zone_corridor_waiting"
+        name: "Hallway Passage (Watch Zone)"
+        type: "watch"
+        reference_resolution: [384, 288]
+        polygon:
+          - [40, 150]
+          - [340, 150]
+          - [340, 275]
+          - [40, 275]
+        dwell_threshold_seconds: 8.0
+        occupancy_limit: 2
+        risk_level: "Medium"
+
     lines:
-    - id: line_entrance_threshold
-      name: Main Entrance Tripwire
-      start:
-      - 200
-      - 320
-      end:
-      - 440
-      - 320
-      direction: inbound
-  cam_02:
+      - id: "line_corridor_midpoint"
+        name: "Corridor Midline Tripwire"
+        reference_resolution: [384, 288]
+        start: [60, 175]
+        end: [320, 175]
+        direction: "inbound"
+        risk_level: "Medium"
+
+  cam_bag_01:
     zones:
-    - id: zone_restricted_server_room
-      name: Server Room Perimeter
-      type: restricted
-      polygon:
-      - - 150
-        - 80
-      - - 490
-        - 80
-      - - 490
-        - 350
-      - - 150
-        - 350
-      dwell_threshold_seconds: 5.0
-      risk_level: high
+      - id: "zone_wall_drop"
+        name: "Corridor Wall Area"
+        type: "watch"
+        reference_resolution: [384, 288]
+        polygon:
+          - [40, 80]
+          - [200, 80]
+          - [200, 260]
+          - [40, 260]
+        dwell_threshold_seconds: 10.0
+        occupancy_limit: 2
+        risk_level: "Medium"
+
     lines:
-    - id: line_server_door
-      name: Server Room Door Line
-      start:
-      - 180
-      - 200
-      end:
-      - 400
-      - 200
-      direction: inbound
-  sample_walking_01:
+      - id: "line_bag_boundary"
+        name: "Wall Boundary Line"
+        reference_resolution: [384, 288]
+        start: [180, 50]
+        end: [180, 270]
+        direction: "both"
+        risk_level: "Medium"
+
+  cam_abandoned_hd:
     zones:
-    - id: zone_restricted_corridor
-      name: Restricted Back Corridor
-      type: restricted
-      polygon:
-      - - 100
-        - 60
-      - - 280
-        - 60
-      - - 280
-        - 180
-      - - 100
-        - 180
-      dwell_threshold_seconds: 5.0
-      risk_level: high
-    - id: zone_lobby_occupancy
-      name: Lobby Pedestrian Occupancy Area
-      type: occupancy
-      polygon:
-      - - 50
-        - 70
-      - - 330
-        - 70
-      - - 330
-        - 260
-      - - 50
-        - 260
-      dwell_threshold_seconds: 30.0
-      risk_level: medium
-      occupancy_limit: 3
+      - id: "zone_aboda_floor"
+        name: "Main Lobby Ground Plane"
+        type: "watch"
+        reference_resolution: [640, 480]
+        polygon:
+          - [60, 200]
+          - [580, 200]
+          - [580, 470]
+          - [60, 470]
+        dwell_threshold_seconds: 15.0
+        occupancy_limit: 4
+        risk_level: "Medium"
+
+      - id: "zone_restricted_doorway"
+        name: "Emergency Exit Passage"
+        type: "restricted"
+        reference_resolution: [640, 480]
+        polygon:
+          - [40, 120]
+          - [240, 120]
+          - [240, 320]
+          - [40, 320]
+        dwell_threshold_seconds: 4.0
+        occupancy_limit: 1
+        risk_level: "High"
+
     lines:
-    - id: line_hallway_tripwire
-      name: Hallway Entrance Tripwire
-      start:
-      - 70
-      - 210
-      end:
-      - 310
-      - 210
-      direction: inbound
+      - id: "line_lobby_threshold"
+        name: "Lobby Entry Tripwire"
+        reference_resolution: [640, 480]
+        start: [160, 250]
+        end: [480, 250]
+        direction: "both"
+        risk_level: "Medium"
+
+  cam_fight_01:
+    zones:
+      - id: "zone_altercation_area"
+        name: "Corridor Intersection"
+        type: "occupancy"
+        reference_resolution: [384, 288]
+        polygon:
+          - [20, 20]
+          - [360, 20]
+          - [360, 280]
+          - [20, 280]
+        dwell_threshold_seconds: 6.0
+        occupancy_limit: 1 # Set limit to 1 so 2 interacting people triggers OCCUPANCY_EXCEEDED
+        risk_level: "Medium"
+
+    lines: []

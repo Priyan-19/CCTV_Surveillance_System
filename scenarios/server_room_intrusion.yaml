@@ -1,0 +1,46 @@
+name: "Server Room Intrusion (Worked Example)"
+description: "Docs/05 Section 5.5: Unknown intruder enters server room, stays, and abandons a bag."
+camera_id: "CAM-01"
+place: "Server Room"
+
+events:
+  - event_type: "UNKNOWN_PERSON"
+    timestamp: 10.0
+    track_id: 7
+    details:
+      identity_status: "UNKNOWN"
+      reason: "no_gallery_match"
+
+  - event_type: "RESTRICTED_ZONE_ENTRY"
+    timestamp: 12.0
+    track_id: 7
+    location:
+      zone_id: "server_room"
+      zone_name: "Server Room"
+      high_risk: false
+    details:
+      identity_status: "UNKNOWN"
+      reason: "no_gallery_match"
+
+  - event_type: "PROLONGED_STAY"
+    timestamp: 35.0
+    track_id: 7
+    location:
+      zone_id: "server_room"
+      zone_name: "Server Room"
+      high_risk: false
+    details:
+      identity_status: "UNKNOWN"
+      reason: "no_gallery_match"
+
+  - event_type: "ABANDONED_OBJECT"
+    timestamp: 60.0
+    object_id: "bag_101"
+    location:
+      zone_id: "server_room"
+      zone_name: "Server Room"
+      high_risk: false
+    details:
+      owner_track_id: 7
+      identity_status: "UNKNOWN"
+      reason: "no_gallery_match"

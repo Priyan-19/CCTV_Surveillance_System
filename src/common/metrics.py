@@ -161,7 +161,10 @@ class PerformanceMetrics:
 
     def generate_summary(self) -> Dict[str, Any]:
         """Produce a complete metrics dictionary for logging, JSON export, and reports."""
-        stage_names = ["read_ms", "detect_ms", "track_ms", "draw_ms", "write_ms", "total_ms"]
+        stage_names = list(self.stage_samples.keys())
+        if "total_ms" in stage_names:
+            stage_names.remove("total_ms")
+            stage_names.append("total_ms")
         stage_dict = {}
         for name in stage_names:
             stats = self.compute_stage_stats(name)

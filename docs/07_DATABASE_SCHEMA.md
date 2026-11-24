@@ -161,3 +161,10 @@ The database stores relative paths only.
 - Incidents and evidence kept for a configurable period (default 90 days).
 - Non-incident video is not stored.
 - Metrics older than 30 days are aggregated or removed.
+
+## 6. Implementation Notes (Phase 4)
+
+- **FTS5 & Triggers:** Automated SQLite triggers `trg_incidents_ai`, `trg_incidents_ad`, and `trg_incidents_au` maintain the `incidents_fts` virtual table in real time, with graceful fallback to `LIKE` keyword search if FTS5 is absent.
+- **System User Seed:** A non-login system user (`id=1`, `username='system'`, `role='admin'`) is automatically seeded for automated threat engine and retention logging in `incident_actions`.
+- **Evidence Paths:** All file paths stored in `evidence.file_path` are normalized relative to project root (`evidence/incidents/INC-XXXXXX/...`).
+- **Camera Auto-Registration:** The repository layer automatically creates parent camera records (`register_camera`) to strictly preserve foreign key integrity (`PRAGMA foreign_keys = ON;`).

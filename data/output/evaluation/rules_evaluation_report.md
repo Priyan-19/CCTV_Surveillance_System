@@ -1,0 +1,11 @@
+# Phase 2 Security Rules Evaluation Report
+
+- **Overall Recall:** 100.0%
+- **Mean Timing Error:** 0.00 seconds
+
+| Log File | Camera ID | Scenario | Events | TP | FP | FN | Mean Error (s) | Event Breakdown |
+| :--- | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :--- |
+| cam_abandoned_hd_1795280832.jsonl | cam_abandoned_hd | abandoned_object_hd | 16 | 1 | 15 | 0 | 0.0 | {'RESTRICTED_ZONE_ENTRY': 8, 'LINE_CROSSING': 6, 'PROLONGED_STAY': 1, 'ABANDONED_OBJECT': 1} |
+| cam_fight_01_1795281794.jsonl | cam_fight_01 | fighting_and_running | 1 | 1 | 0 | 0 | 0.0 | {'OCCUPANCY_EXCEEDED': 1} |
+| cam_walk_01_1795280040.jsonl | cam_walk_01 | walking_single | 2 | 2 | 0 | 0 | 0.0 | {'LINE_CROSSING': 1, 'RESTRICTED_ZONE_ENTRY': 1} |
+| cam_walk_01_1795282273.jsonl | cam_walk_01 | normal_pedestrians | 3 | 0 | 3 | 0 | 0.0 | {'LINE_CROSSING': 1, 'RESTRICTED_ZONE_ENTRY': 2} |

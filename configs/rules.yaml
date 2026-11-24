@@ -1,0 +1,54 @@
+# Security Rule Engine Thresholds & Parameters (Phase 2)
+# Reference: docs/05_THREAT_ENGINE_SPEC.md, docs/10_TEST_PLAN.md
+
+restricted_zone:
+  # Spatial reference point: 'bottom_center' (feet on floor plane) or 'center' (mid-torso)
+  reference_point: "bottom_center"
+  # Debounce: minimum consecutive frames required inside polygon before confirming entry
+  confirm_frames: 5
+  # Seconds to wait before re-arming rule for the same individual in the same zone
+  cooldown_seconds: 10.0
+
+line_crossing:
+  reference_point: "bottom_center"
+  # Cooldown to suppress oscillatory jitter across the tripwire boundary
+  cooldown_seconds: 10.0
+
+prolonged_stay:
+  reference_point: "bottom_center"
+  # Default dwell threshold if not explicitly specified on the zone definition
+  default_dwell_threshold_seconds: 30.0
+
+loitering:
+  reference_point: "bottom_center"
+  # Duration of the sliding time window for wandering evaluation
+  window_seconds: 20.0
+  # Allowed radius expressed as a multiplier of person bounding box height (e.g. 1.5x)
+  radius_height_multiplier: 1.5
+  # Minimum total pacing distance in pixels to distinguish loitering from stationary sitting
+  min_movement_pixels: 20.0
+  cooldown_seconds: 30.0
+
+abandoned_object:
+  # COCO class labels to monitor as potential unattended luggage
+  bag_classes:
+    - "backpack"
+    - "handbag"
+    - "suitcase"
+  # Time in seconds an object must remain motionless before considered stationary
+  stationary_seconds: 10.0
+  # Time in seconds owner/bystanders must remain beyond the separation distance
+  owner_away_seconds: 5.0
+  # Separation distance threshold in multiples of average person height (e.g. 1.0x)
+  owner_distance_multiplier: 1.0
+  # Pixel tolerance to associate flickering detections to the same candidate
+  spatial_match_distance_px: 50.0
+  # Maximum tolerated missing detection frames before dropping a lost candidate (~6.0s at 30 FPS)
+  max_missing_frames: 180
+
+occupancy:
+  reference_point: "bottom_center"
+  # Debounce: minimum sustained duration in seconds above limit before triggering alert
+  sustain_seconds: 1.5
+  # Seconds count must stay at/below limit before resetting state (survives momentary occlusion)
+  drop_tolerance_seconds: 0.5

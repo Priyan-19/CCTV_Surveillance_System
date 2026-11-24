@@ -68,3 +68,12 @@ Notification messages include incident number, level, place, time and a link. Fa
 | Denial of service on pipeline | Bounded queues, per-camera isolation |
 | Spoofed or misleading alerts | Alerts generated only by server pipeline, signed internal calls |
 | Excessive false alarms | Correlation, thresholds, feedback loop |
+
+---
+
+## 4. Operational Privacy Rules (Phase 4 Updates)
+
+1. **Alert Notification Body Gate:** In `AlertDispatcher`, notifications sent to consoles or external outboxes strictly exclude biometric face images (`include_face_image_in_notification: false`). Evidence paths are provided as URIs for authorized review in the dashboard only.
+2. **Proportionality of Evidence Collection:** Frame snapshots and video clips are stored **only for subjects involved in active security incidents**. Non-incident footage in the 30-second rolling RAM buffer is automatically evicted from RAM (FIFO) and never written to disk.
+3. **Stratified Overhead Identity Protection:** Unconstrained faces from overhead wide-angle cameras are penalized with only a nominal +5 modifier rather than a full +15 stranger escalation, preventing false alarms and privacy-invasive flagging of passersby.
+4. **Disk Safety Pre-check:** The evidence clip writer verifies that free storage exceeds `min_free_disk_mb: 500 MB` before encoding any video file, preventing surveillance disk exhaustion.

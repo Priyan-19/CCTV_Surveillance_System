@@ -1,0 +1,27 @@
+name: "Wide Camera Overhead Unknown vs Verified Unknown"
+description: "Demonstrates Clarification (b): +5 for unconstrained overhead wide camera vs +15 verified non-match."
+camera_id: "CAM-04"
+place: "High Bay Warehouse"
+
+events:
+  # Person 1 on overhead camera with small / blurred face
+  - event_type: "LINE_CROSSING"
+    timestamp: 10.0
+    track_id: 501
+    location:
+      zone_id: "aisle_4"
+      zone_name: "Warehouse Aisle 4"
+    details:
+      identity_status: "UNKNOWN"
+      reason: "overhead_low_quality_blur"
+
+  # Person 2 at entry kiosk with clear face verified against gallery
+  - event_type: "LINE_CROSSING"
+    timestamp: 250.0
+    track_id: 502
+    location:
+      zone_id: "kiosk_entry"
+      zone_name: "Security Kiosk Entry"
+    details:
+      identity_status: "UNKNOWN"
+      reason: "no_gallery_match"

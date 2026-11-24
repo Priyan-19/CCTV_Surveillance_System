@@ -31,7 +31,7 @@ logging.basicConfig(
 logger = logging.getLogger("fetch_chokepoint")
 
 ZENODO_RECORD_ID = "815657"
-ZENODO_BASE_URL = f"https://zenodo.org/records/{ZENODO_RECORD_ID}/files"
+ZENODO_BASE_URL = f"https://zenodo.org/api/records/{ZENODO_RECORD_ID}/files"
 
 
 class ChokePointArchive(NamedTuple):
@@ -99,7 +99,7 @@ def download_with_progress(url: str, dest_path: Path, expected_bytes: int) -> bo
     try:
         req = urllib.request.Request(
             url,
-            headers={"User-Agent": "Mozilla/5.0 (CCTV-Research-Dataset-Fetcher/1.0)"},
+            headers={"User-Agent": "curl/8.4.0"},
         )
         with urllib.request.urlopen(req, timeout=120) as resp, open(temp_path, "wb") as out_f:
             downloaded = 0
@@ -212,7 +212,7 @@ def main() -> None:
     for name in args.archives:
         info = CHOKEPOINT_FILES[name]
         target_file = dest_dir / name
-        url = f"{ZENODO_BASE_URL}/{name}?download=1"
+        url = f"{ZENODO_BASE_URL}/{name}/content"
 
         if target_file.exists():
             logger.info("Found existing archive: %s. Verifying MD5...", name)
@@ -237,8 +237,14 @@ def main() -> None:
                 sys.exit(1)
             logger.info("Checksum verified OK: %s", downloaded_md5)
 
-        # Extract
+        # Extract outer archive
         extract_archive(target_file, dest_dir)
+
+        # Automatically extract nested camera archives (e.g. P1E_S3_C1.tar.xz)
+        base_name = target_file.name.split(".")[0]  # e.g. 'P1E_S3'
+        for nested_tar in sorted(dest_dir.glob(f"{base_name}_C*.tar.xz")):
+            logger.info("Found nested camera archive: %s. Unpacking...", nested_tar.name)
+            extract_archive(nested_tar, dest_dir)
 
     print("=" * 80)
     print("[SUCCESS] ChokePoint sequences downloaded, verified, and extracted.")

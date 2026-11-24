@@ -17,6 +17,7 @@ import logging
 import sys
 from pathlib import Path
 from typing import Dict, List, Set, Tuple
+import yaml
 
 logging.basicConfig(
     level=logging.INFO,
@@ -117,6 +118,61 @@ def verify_split_disjoint(
     return violations
 
 
+def extract_session_prefix(sequence_name: str) -> str:
+    """Extract session prefix (e.g. 'P1E_S1' from 'P1E_S1_C1')."""
+    parts = sequence_name.split("_")
+    if len(parts) >= 2:
+        return f"{parts[0]}_{parts[1]}"
+    return sequence_name
+
+
+def verify_chokepoint_session_disjoint(split_yaml_path: Path) -> List[str]:
+    """Verify that ChokePoint enrolment, tuning, and validation sequences are session-disjoint."""
+    violations: List[str] = []
+    if not split_yaml_path.exists():
+        logger.info("ChokePoint split config not found at %s; skipping check.", split_yaml_path)
+        return violations
+
+    try:
+        with open(split_yaml_path, "r", encoding="utf-8") as f:
+            data = yaml.safe_load(f) or {}
+    except Exception as e:
+        violations.append(f"Failed to parse ChokePoint split {split_yaml_path}: {e}")
+        return violations
+
+    enrolled_seq = data.get("enrolment_sequence", "P1E_S1_C1")
+    tuning_seq = data.get("tuning", {}).get("sequence", "")
+    val_seq = data.get("validation", {}).get("sequence", "")
+
+    # Check exact sequence names
+    sequences = [("enrolment", enrolled_seq), ("tuning", tuning_seq), ("validation", val_seq)]
+    for i in range(len(sequences)):
+        for j in range(i + 1, len(sequences)):
+            name_a, seq_a = sequences[i]
+            name_b, seq_b = sequences[j]
+            if seq_a and seq_b and seq_a == seq_b:
+                violations.append(
+                    f"[ChokePoint] Sequence overlap: {name_a} and {name_b} both use exact sequence '{seq_a}'"
+                )
+
+    # Check session-level isolation
+    enrolled_sess = extract_session_prefix(enrolled_seq)
+    tuning_sess = extract_session_prefix(tuning_seq)
+    val_sess = extract_session_prefix(val_seq)
+
+    sessions = [("enrolment", enrolled_sess), ("tuning", tuning_sess), ("validation", val_sess)]
+    for i in range(len(sessions)):
+        for j in range(i + 1, len(sessions)):
+            name_a, sess_a = sessions[i]
+            name_b, sess_b = sessions[j]
+            if sess_a and sess_b and sess_a == sess_b:
+                violations.append(
+                    f"[ChokePoint] Session contamination: {name_a} session '{sess_a}' matches {name_b} session '{sess_b}' (cross-camera views in the same session are not statistically disjoint)"
+                )
+
+    return violations
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Verify zero data leakage between data/samples/ and dataset training folders.",
@@ -133,6 +189,12 @@ def main() -> None:
         type=Path,
         default=Path("data/datasets"),
         help="Path to datasets root directory.",
+    )
+    parser.add_argument(
+        "--chokepoint-split",
+        type=Path,
+        default=Path("configs/chokepoint_split.yaml"),
+        help="Path to ChokePoint split partition YAML file.",
     )
     parser.add_argument(
         "--dry-run",
@@ -167,7 +229,10 @@ def main() -> None:
     split_violations.extend(verify_split_disjoint(rwf_train_fight, rwf_val_fight, "RWF2000-Fight"))
     split_violations.extend(verify_split_disjoint(rwf_train_nonfight, rwf_val_nonfight, "RWF2000-NonFight"))
 
-    all_violations = quarantine_violations + split_violations
+    # 3. ChokePoint sequence and session isolation check
+    chokepoint_violations = verify_chokepoint_session_disjoint(args.chokepoint_split)
+
+    all_violations = quarantine_violations + split_violations + chokepoint_violations
 
     print("-" * 80)
     if all_violations:
@@ -181,6 +246,7 @@ def main() -> None:
         print("[PASS] ZERO LEAKAGE DETECTED.")
         print("  - Samples in data/samples/ are strictly quarantined from all training sets.")
         print("  - No split overlap detected between training and validation partitions.")
+        print("  - ChokePoint enrolment, tuning, and validation sequences are session-disjoint.")
         print("=" * 80)
         sys.exit(0)
 

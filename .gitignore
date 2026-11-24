@@ -51,8 +51,19 @@ data/samples/*
 # Generated pipeline output, visual media, and run artifacts
 data/output/*
 !data/output/.gitkeep
+!data/output/benchmarks/
 !data/output/benchmarks/*.md
 !data/output/benchmarks/*.csv
+!data/output/evaluation/
+!data/output/evaluation/*.md
+!data/output/evaluation/*.csv
+
+# Databases and journal files (never commit local SQLite databases)
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
 
 # Project manifests and documentation in data/ must be tracked
 !data/DATASETS.md

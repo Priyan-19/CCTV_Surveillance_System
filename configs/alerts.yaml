@@ -1,0 +1,23 @@
+# Alert Dispatcher Configuration
+# Conforms to docs/05_THREAT_ENGINE_SPEC.md Section 7 and docs/11_SECURITY_PRIVACY.md.
+
+dispatch:
+  # Enable alert delivery sinks
+  console_enabled: true
+  file_outbox_enabled: true
+  outbox_path: "data/output/alerts/alerts_outbox.jsonl"
+
+rules:
+  # Minimum severity levels required per dispatch channel
+  # Low: logged only in database
+  # Medium: displayed on dashboard and outbox
+  # High & Critical: priority notification with evidence links
+  min_level_console: "Medium"
+  min_level_outbox: "Medium"
+  min_level_notification: "High"
+
+content:
+  # Include file links or paths to collected evidence in notification body
+  include_evidence_links: true
+  # Privacy gate (docs/11): Face images are NEVER included in notifications unless explicitly enabled
+  include_face_image_in_notification: false

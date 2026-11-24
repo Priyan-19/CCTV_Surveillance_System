@@ -136,3 +136,14 @@ Unknown person enters server room, stays, leaves a bag.
 - Weights, thresholds and window are config values.
 - Replay recorded test videos and compare incident output against expected outcomes.
 - Measure alert reduction versus one-alert-per-event baseline.
+
+## 9. Design Refinements (Phase 4 Updates)
+
+1. **Repeated Event Modifier (Clarification a):** +25% of the highest-weight repeated event type, applied **once per incident** (not compounding with successive repetitions).
+2. **Stratified Unknown Identity Modifier (Clarification b):**
+   - Verified stranger against enrolled gallery: **+15**
+   - Overhead / wide-angle / unconstrained blurred face (`no_usable_face`): **+5**
+   - Biometric status pending: **0**
+3. **Authorized Person Deduction (Clarification c):** -20 deduction is applied **only if every person event** in the incident occurred in an authorized zone. Any restricted zone entry immediately voids the deduction.
+4. **Audit Trace & History (Clarification d):** Every scoring decision appends a timestamped explanation and modifier breakdown to `incident.score_history` and `incident.details`.
+5. **Evidence Collection Deduplication:** Snapshot crops are collected once per incident upon detection. Video clip re-encoding is performed only upon alert escalation and incident closure to eliminate frame-rate degradation.

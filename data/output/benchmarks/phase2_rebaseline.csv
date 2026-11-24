@@ -1,0 +1,5 @@
+condition,clip_file,imgsz,frames_evaluated,throughput_fps,inference_fps,mean_total_latency_ms,mean_rules_latency_ms,status
+Single walker (CAVIAR 384x288),sample_walking_01.mp4,640,400,23.49,24.42,42.49,0.06,PASS
+"Unattended bag HD (ABODA 640x480, 960px inference)",sample_abandoned_bag_hd.mp4,960,500,24.64,26.8,40.49,0.11,PASS
+Two-person altercation (CAVIAR 384x288),sample_fight_01.mp4,640,400,27.92,29.08,35.74,0.07,PASS
+Normal pedestrians (CAVIAR 384x288),sample_normal_01.mp4,640,400,27.72,29.22,35.97,0.07,PASS

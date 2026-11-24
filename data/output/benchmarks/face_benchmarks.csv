@@ -1,0 +1,5 @@
+scenario,source,imgsz,phase2_fps,phase2_ms,phase3_fps,phase3_ms,fps_delta,detect_ms,track_ms,face_dispatch_ms,rules_ms,face_jobs_processed,face_jobs_dropped,face_drop_rate_pct,status
+Single walker (CAVIAR 384x288),data/samples/sample_walking_01.mp4,640,23.49,42.49,24.81,40.23,1.32,30.42,7.61,0.0,0.06,136,0,0.0,PASS
+Abandoned bag HD (ABODA 640x480),data/samples/sample_abandoned_bag_hd.mp4,960,24.64,40.49,18.83,53.03,-5.81,38.57,9.64,0.0,0.15,1165,0,0.0,BELOW TARGET
+Crowd altercation (CAVIAR 384x288),data/samples/sample_fight_01.mp4,640,27.92,35.74,27.32,36.46,-0.6,27.26,6.82,0.0,0.07,176,0,0.0,PASS
+Normal pedestrians (CAVIAR 384x288),data/samples/sample_normal_01.mp4,640,27.72,35.97,27.72,35.88,0.0,26.54,6.64,0.0,0.08,165,0,0.0,PASS

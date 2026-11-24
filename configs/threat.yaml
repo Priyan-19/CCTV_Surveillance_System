@@ -1,18 +1,22 @@
 # Threat Engine Configuration
-# Derived from docs/05_THREAT_ENGINE_SPEC.md
+# Conforms strictly to docs/05_THREAT_ENGINE_SPEC.md and approved design clarifications.
 
 correlation:
-  # Maximum time window in seconds to link events into the same incident
-  time_window_seconds: 120
+  # Maximum time window in seconds between related events to link into the same incident
+  time_window_seconds: 120.0
   # Quiet period in seconds with no new events before closing an active incident
-  quiet_period_seconds: 300
+  quiet_period_seconds: 300.0
+  # Maximum time in seconds to hold an UNKNOWN_PERSON context event in pending buffer
+  pending_unknown_buffer_seconds: 10.0
+  # Active correlation keys within the camera
   correlation_keys:
     - track_id
     - person_id
     - object_id
     - location
 
-# Base weights assigned per unique event type (0-100 scale)
+# Base weights assigned per unique event type (docs/05 Section 5.1)
+# Note: Rule-based and model-based LOITERING merge into a single unique type.
 event_weights:
   FIGHTING: 50
   RESTRICTED_ZONE_ENTRY: 40
@@ -22,18 +26,28 @@ event_weights:
   PROLONGED_STAY: 15
   OCCUPANCY_EXCEEDED: 15
   RUNNING: 10
-  UNKNOWN_PERSON: 0 # Used as a modifier (+15) rather than standalone weight
 
-# Score modifiers applied to the base sum
+# Score modifiers applied to the sum of unique event weights (docs/05 Section 5.2)
 modifiers:
-  unknown_person_penalty: 15
-  known_authorized_bonus: -20
-  distinct_event_types_threshold: 3
-  distinct_event_types_penalty: 10
-  high_risk_zone_penalty: 10
-  repeated_event_type_multiplier: 0.25 # +25% of that event's weight, applied once
+  # Clarification (b): Unknown identity penalty stratified by biometric quality
+  unknown_verified_penalty: 15        # Verified non-match: usable face compared against gallery
+  unknown_no_usable_face_penalty: 5   # Low resolution / blur rejection (e.g. overhead wide cameras)
+  pending_penalty: 0                  # Track still evaluating; no modifier applied
 
-# Incident classification tiers
+  # Clarification (c): Known and authorized deduction
+  known_authorized_bonus: -20         # Deducted only if every person event occurred in an authorized zone
+
+  # Multi-event escalation
+  distinct_event_types_threshold: 3
+  distinct_event_types_penalty: 10    # 3 or more distinct event types in one incident
+
+  # Spatial escalation
+  high_risk_zone_penalty: 10          # Triggered when any event occurs in a zone marked high_risk: True
+
+  # Clarification (a): Repeated event modifier
+  repeated_event_type_multiplier: 0.25 # +25% of highest-weight repeated event type, applied once per incident
+
+# Incident classification tiers (docs/05 Section 5.4)
 severity_levels:
   low:
     min_score: 0

@@ -1,0 +1,35 @@
+model:
+  name: buffalo_s
+  det_size:
+  - 160
+  - 160
+  ctx_id: -1
+  providers:
+  - CPUExecutionProvider
+matcher:
+  similarity_threshold: 0.35
+  required_margin: 0.04
+quality:
+  min_face_size: 36
+  min_blur_score: 30.0
+  min_det_score: 0.55
+  # Minimum person bounding-box width/height to even attempt face submission.
+  # A person crop narrower than 2× min_face_size can never contain a usable face.
+  min_person_bbox_px: 72
+state_machine:
+  min_consistent_matches: 2
+  min_consistent_stranger_votes: 2
+  timeout_seconds: 2.0
+  recheck_interval_seconds: 1.0
+  # When a track is UNKNOWN with reason no_usable_face, multiply recheck_interval
+  # by this factor to slow down futile GPU submissions.
+  no_usable_face_backoff_multiplier: 3.0
+worker:
+  queue_size: 16
+  drop_policy: drop_oldest
+  # Hard cap on face recognition jobs submitted per second (token-bucket).
+  # Prevents background InsightFace from starving YOLO CUDA SMs.
+  max_face_jobs_per_second: 4.0
+database:
+  db_path: data/cctv.db
+  enrolment_images_dir: data/known_persons

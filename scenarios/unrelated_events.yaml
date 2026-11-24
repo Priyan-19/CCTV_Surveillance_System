@@ -1,0 +1,19 @@
+name: "Unrelated Spatiotemporal Events"
+description: "Two distinct security events occurring outside the 120-second correlation window."
+camera_id: "CAM-01"
+place: "North Perimeter Corridor"
+
+events:
+  - event_type: "LINE_CROSSING"
+    timestamp: 10.0
+    track_id: 101
+    location:
+      zone_id: "perimeter_fence"
+      zone_name: "Perimeter Fence North"
+
+  - event_type: "LINE_CROSSING"
+    timestamp: 210.0
+    track_id: 102
+    location:
+      zone_id: "perimeter_fence"
+      zone_name: "Perimeter Fence North"

@@ -1,0 +1,21 @@
+name: "Abandoned Bag Owner Linkage"
+description: "Person walks into lobby, loiters, leaves bag and walks away. Bag correlates to person."
+camera_id: "CAM-03"
+place: "Terminal Lobby"
+
+events:
+  - event_type: "LOITERING"
+    timestamp: 15.0
+    track_id: 44
+    location:
+      zone_id: "lobby_hall"
+      zone_name: "Terminal Lobby Hall"
+
+  - event_type: "ABANDONED_OBJECT"
+    timestamp: 45.0
+    object_id: "luggage_99"
+    location:
+      zone_id: "lobby_hall"
+      zone_name: "Terminal Lobby Hall"
+    details:
+      owner_track_id: 44

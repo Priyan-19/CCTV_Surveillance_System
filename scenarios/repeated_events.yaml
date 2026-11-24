@@ -1,0 +1,26 @@
+name: "Repeated Security Events"
+description: "Person repeatedly triggers restricted entry within the correlation window; modifier applied once."
+camera_id: "CAM-02"
+place: "Data Center Door"
+
+events:
+  - event_type: "RESTRICTED_ZONE_ENTRY"
+    timestamp: 10.0
+    track_id: 5
+    location:
+      zone_id: "data_door"
+      zone_name: "Data Center Door"
+
+  - event_type: "RESTRICTED_ZONE_ENTRY"
+    timestamp: 25.0
+    track_id: 5
+    location:
+      zone_id: "data_door"
+      zone_name: "Data Center Door"
+
+  - event_type: "RESTRICTED_ZONE_ENTRY"
+    timestamp: 45.0
+    track_id: 5
+    location:
+      zone_id: "data_door"
+      zone_name: "Data Center Door"

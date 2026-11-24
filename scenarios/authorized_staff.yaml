@@ -1,0 +1,17 @@
+name: "Authorized Staff Member"
+description: "Known authorized staff member in authorized zone receives -20 score deduction."
+camera_id: "CAM-01"
+place: "Staff Breakroom"
+
+events:
+  - event_type: "LOITERING"
+    timestamp: 10.0
+    track_id: 88
+    person_id: 1
+    location:
+      zone_id: "breakroom"
+      zone_name: "Staff Breakroom"
+      authorized: true
+    details:
+      identity_status: "KNOWN"
+      person_name: "Authorized Staff"
